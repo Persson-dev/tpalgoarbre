@@ -221,6 +221,15 @@ node *deleteNode(node *root, uint64_t data)
     return root;
 }
 
+node* search(node* root, std::uint64_t data) {
+    if (!root || root->data == data)
+        return root;
+
+    if (data < root->data)
+        return search(root->left, data);
+    return search(root->right, data);
+}
+
 int main()
 {
 
