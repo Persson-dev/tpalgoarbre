@@ -243,9 +243,14 @@ std::string printAVL (node* n){
 
 int main()
 {
-    node * root = new node(5);
-    std::cout << printAVL(root);
 
-    delete root;
+    node *root = nullptr;
+    auto tab = {5, 69, 1, 8, 2, 7, 3, 9, 6, 4, 10};
+    for (auto element : tab) {
+        root = insert(root, element);
+    }
+
+    std::cout << printAVL(root) << std::endl;
+
     return 0;
 }
