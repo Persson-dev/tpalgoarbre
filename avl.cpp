@@ -38,12 +38,17 @@ typedef struct node
     }
 } node;
 
+int height(node *n)
+{
+    return n ? n->height : 0;
+}
+
 /**
  * Balance factor
  */
 int bf(node *n)
 {
-    return n ? (n->left ? n->left->height : 0) - (n->right ? n->right->height : 0) : 0;
+    return n ? height(n->left) - height(n->right) : 0;
 }
 
 node *llrotation(node *n)
