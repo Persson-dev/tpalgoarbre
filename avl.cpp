@@ -20,17 +20,17 @@ Retrouvons-nous bien les complexité logarithmiques promises ?
 */
 
 #include <iostream>
+#include <fstream>
+#include <ctime>
 
 // Définition du type noeud de l'arbre ...
-typedef struct node
-{
+typedef struct node {
     struct node *left;
     std::uint64_t data;
     int height;
     struct node *right;
 
-    node(std::uint64_t a_Data)
-    {
+    node(std::uint64_t a_Data) {
         left = nullptr;
         data = a_Data;
         height = 1;
@@ -38,20 +38,18 @@ typedef struct node
     }
 } node;
 
-int height(node *n)
-{
+int height(node *n) {
     return n ? n->height : 0;
 }
 
 /**
  * Balance factor
  */
-int bf(node *n)
-{
+int bf(node *n) {
     return n ? height(n->left) - height(n->right) : 0;
 }
 
-node *rrrotation(node *n){ // Rotation RR
+node *rrrotation(node *n) { // Rotation RR
     node *tp;
     tp = n->left;
 
@@ -64,7 +62,7 @@ node *rrrotation(node *n){ // Rotation RR
 }
 
 
-node* llrotation(node *n){ // Rotation LL
+node *llrotation(node *n) { // Rotation LL
     node *tp;
     tp = n->right;
 
@@ -73,20 +71,20 @@ node* llrotation(node *n){ // Rotation LL
 
     n->height = std::max(height(n->left), height(n->right)) + 1;
     tp->height = std::max(height(tp->right), tp->height) + 1;
-    return tp; 
+    return tp;
 }
 
 
-node * rlrotation(node *n){ // Rotation RL
+node *rlrotation(node *n) { // Rotation RL
     node *tp;
 
     n->left = llrotation(n->left);
     tp = rrrotation(n);
 
-    return tp; 
+    return tp;
 }
 
-node* lrrotation(node *n){ // Rotation LR
+node *lrrotation(node *n) { // Rotation LR
     node *tp;
 
     n->right = rrrotation(n->right);
@@ -96,19 +94,15 @@ node* lrrotation(node *n){ // Rotation LR
 }
 
 // insère la valeur data au bon endroit dans l'arbre enraciné en root ...
-node *insert(node *root, uint64_t data)
-{
+node *insert(node *root, uint64_t data) {
     if (!root)
         return new node{data};
 
     if (data < root->data)
         root->left = insert(root->left, data);
-    else if (data > root->data)
-    {
+    else if (data > root->data) {
         root->right = insert(root->right, data);
-    }
-    else
-    {
+    } else {
         return root;
     }
 
@@ -125,22 +119,19 @@ node *insert(node *root, uint64_t data)
         return llrotation(root);
 
     // gauche droite
-    if (balance > 1 && data > root->left->data)
-    {
+    if (balance > 1 && data > root->left->data) {
         return rlrotation(root);
     }
 
     // droite gauche
-    if (balance < -1 && data < root->right->data)
-    {
+    if (balance < -1 && data < root->right->data) {
         return lrrotation(root);
     }
 
     return root;
 }
 
-node *minNode(node *root)
-{
+node *minNode(node *root) {
     node *current = root;
 
     // loop down to find the leftmost leaf
@@ -150,38 +141,29 @@ node *minNode(node *root)
     return current;
 }
 
-node *deleteNode(node *root, uint64_t data)
-{
+node *deleteNode(node *root, uint64_t data) {
     if (!root)
         return root;
 
-    if (data < root->left->data)
-    {
+    if (data < root->left->data) {
         root->left = deleteNode(root->left, data);
         return root;
-    }
-    else if (data > root->right->data)
-    {
+    } else if (data > root->right->data) {
         root->right = deleteNode(root->right, data);
         return root;
     }
     if ((root->left == nullptr) ||
-        (root->right == nullptr))
-    {
+        (root->right == nullptr)) {
         node *temp = root->left ? root->left : root->right;
 
-        if (temp == nullptr)
-        {
+        if (temp == nullptr) {
             temp = root;
             root = nullptr;
-        }
-        else
+        } else
             *root = *temp;
 
         delete temp;
-    }
-    else
-    {
+    } else {
         node *temp = minNode(root->right);
         // Copy the inorder successor's
         // data to this node
@@ -197,31 +179,31 @@ node *deleteNode(node *root, uint64_t data)
     int balance = bf(root);
 
     // gauche gauche
-    if (balance > 1 && 
+    if (balance > 1 &&
         bf(root->left) >= 0)
         return rrrotation(root);
 
     // gauche droite
-    if (balance > 1 && 
+    if (balance > 1 &&
         bf(root->left) < 0) {
         return rlrotation(root);
     }
 
     // droite droite
-    if (balance < -1 && 
+    if (balance < -1 &&
         bf(root->right) <= 0)
         return llrotation(root);
 
     // droite gauche
-    if (balance < -1 && 
+    if (balance < -1 &&
         bf(root->right) > 0) {
         return lrrotation(root);
     }
-    
+
     return root;
 }
 
-node* search(node* root, std::uint64_t data) {
+node *search(node *root, std::uint64_t data) {
     if (!root || root->data == data)
         return root;
 
@@ -230,7 +212,7 @@ node* search(node* root, std::uint64_t data) {
     return search(root->right, data);
 }
 
-std::string printAVL (node* n){
+std::string printAVL(node *n) {
     std::string str = "";
     if (n == nullptr) {
         str = "()";
@@ -241,16 +223,74 @@ std::string printAVL (node* n){
     }
 }
 
-int main()
-{
+int main() {
+    int t_start, t_end, t_exec;
+    node *root;
 
-    node *root = nullptr;
-    auto tab = {5, 69, 1, 8, 2, 7, 3, 9, 6, 4, 10};
-    for (auto element : tab) {
-        root = insert(root, element);
+    std::string power;
+    std::string valuename;
+    std::string searchname;
+    std::string deletename;
+
+    std::string line;
+
+    for (int i = 1; i < 6; i++) {
+        power = std::to_string(5 * i);
+        valuename = "Values_" + power + ".txt";
+        searchname = "Search_" + power + ".txt";
+        deletename = "Delete_" + power + ".txt";
+        //INSERTION
+        std::ifstream vfile(valuename);
+        if (!vfile.is_open()) {
+            std::cerr << "Error opening the file" << std::endl;
+            return 1;
+        }
+
+        t_start = clock();
+        while (getline(vfile, line)) {
+            insert(root, std::stoull(line));
+        }
+        t_end = clock();
+        t_exec = (t_end - t_start) * 1000 / CLOCKS_PER_SEC;
+        std::cout << power << " | Temps d'inser : " << t_exec << " ms" << std::endl;
+
+        vfile.close();
+
+        //RECHERCHE
+        std::ifstream sfile(searchname);
+        if (!sfile.is_open()) {
+            std::cerr << "Error opening the file" << std::endl;
+            return 1;
+        }
+
+        t_start = clock();
+        while (getline(sfile, line)) {
+            search(root, std::stoull(line));
+        }
+        t_end = clock();
+        t_exec = (t_end - t_start) * 1000 / CLOCKS_PER_SEC;
+        std::cout << power << " |  Temps de recherche : " << t_exec << " ms" << std::endl;
+
+        sfile.close();
+
+        //SUPPRESSION
+        std::ifstream dfile(deletename);
+        if (!dfile.is_open()) {
+            std::cerr << "Error opening the file" << std::endl;
+            return 1;
+        }
+
+        t_start = clock();
+        while (getline(dfile, line)) {
+            deleteNode(root, std::stoull(line));
+        }
+        t_end = clock();
+        t_exec = (t_end - t_start) * 1000 / CLOCKS_PER_SEC;
+        std::cout << power << " | Temps de suppression : " << t_exec << " ms" << std::endl;
+
+        dfile.close();
     }
 
-    std::cout << printAVL(root) << std::endl;
-
+    delete root;
     return 0;
 }
