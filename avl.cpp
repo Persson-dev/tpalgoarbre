@@ -44,6 +44,8 @@ node* llrotation(node *n){ // Rotation LL
     n->left = nullptr;
     tp->right = n;
 
+    n->height = max(height(n->left), height(n->right)) + 1;
+    tp->height = max(height(tp->right), tp->height) + 1;
     return tp;
 }
 
@@ -55,6 +57,8 @@ node* rrrotation(node *n){ // Rotation RR
     n->right = nullptr;
     tp->left = n;
 
+    n->height = max(height(n->left), height(n->right)) + 1;
+    tp->height = max(height(tp->right), tp->height) + 1;
     return tp; 
 }
 
