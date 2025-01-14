@@ -60,8 +60,8 @@ node *rrrotation(node *n)
     n->left = tp->right;
     tp->right = n;
 
-    n->height = max(height(n->left), height(n->right)) + 1;
-    tp->height = max(height(tp->right), tp->height) + 1;
+    n->height = std::max(height(n->left), height(n->right)) + 1;
+    tp->height = std::max(height(tp->right), tp->height) + 1;
     return tp;
 }
 
@@ -73,8 +73,8 @@ node* llrotation(node *n){ // Rotation LL
     n->right = tp->left;
     tp->left = n;
 
-    n->height = max(height(n->left), height(n->right)) + 1;
-    tp->height = max(height(tp->right), tp->height) + 1;
+    n->height = std::max(height(n->left), height(n->right)) + 1;
+    tp->height = std::max(height(tp->right), tp->height) + 1;
     return tp; 
 }
 
