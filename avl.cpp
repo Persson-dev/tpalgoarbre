@@ -51,13 +51,13 @@ int bf(node *n)
     return n ? height(n->left) - height(n->right) : 0;
 }
 
-node *llrotation(node *n)
-{ // Rotation LL
+node *rrrotation(node *n)
+{ // Rotation RR
     node *p;
     node *tp;
     tp = n->left;
 
-    n->left = nullptr;
+    n->left = tp->right;
     tp->right = n;
 
     n->height = max(height(n->left), height(n->right)) + 1;
@@ -66,11 +66,11 @@ node *llrotation(node *n)
 }
 
 
-node* rrrotation(node *n){ // Rotation RR
+node* llrotation(node *n){ // Rotation LL
     node *tp;
     tp = n->right;
 
-    n->right = nullptr;
+    n->right = tp->left;
     tp->left = n;
 
     n->height = max(height(n->left), height(n->right)) + 1;
