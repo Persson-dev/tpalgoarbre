@@ -21,12 +21,10 @@ Retrouvons-nous bien les complexité logarithmiques promises ?
 
 #include <iostream>
 
-using namespace std;
-
 // Définition du type noeud de l'arbre ...
 typedef struct node {
     struct node *left;
-    uint64_t data;
+    std::uint64_t data;
     int height;
     struct node *right;
 
@@ -45,38 +43,40 @@ node* llrotation(node *n){ // Rotation LL
     p = n;
     tp = p->left;
 
-    p->left = tp->right;
+    p->left = nullptr;
     tp->right = p;
 
-    return tp; 
+    return tp;
 }
 
 
 node* rrrotation(node *n){ // Rotation RR
-    node *p;
     node *tp;
-    p = n;
-    tp = p->right;
+    tp = n->right;
 
-    p->right = tp->left;
-    tp->left = p;
+    n->right = nullptr;
+    tp->left = n;
 
     return tp; 
 }
 
 
-node * rlrotation(node *n){
+node * rlrotation(node *n){ // Rotation RL
     node *tp;
-    // effectue la rotation RL
-    // TODO
+
+    n->left = llrotation(n->left);
+    tp = rrrotation(n);
+
     return tp; 
 }
 
-node* lrrotation(node *n){
+node* lrrotation(node *n){ // Rotation LR
     node *tp;
-    // effectue la rotation LR
-    // TODO
-    return tp; 
+
+    n->right = rrrotation(n->right);
+    tp = llrotation(n);
+
+    return tp;
 }
 
 node* insert(node *root, uint64_t data){
