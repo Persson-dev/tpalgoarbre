@@ -51,8 +51,7 @@ int bf(node *n)
     return n ? height(n->left) - height(n->right) : 0;
 }
 
-node *rrrotation(node *n)
-{ // Rotation RR
+node *rrrotation(node *n){ // Rotation RR
     node *tp;
     tp = n->left;
 
@@ -128,13 +127,13 @@ node *insert(node *root, uint64_t data)
     // gauche droite
     if (balance > 1 && data > root->left->data)
     {
-        return lrrotation(root);
+        return rlrotation(root);
     }
 
     // droite gauche
     if (balance < -1 && data < root->right->data)
     {
-        return rlrotation(root);
+        return lrrotation(root);
     }
 
     return root;
@@ -192,9 +191,6 @@ node *deleteNode(node *root, uint64_t data)
         root->right = deleteNode(root->right, temp->data);
     }
 
-    if (root == nullptr)
-        return root;
-
     root->height = 1 + std::max(root->left ? root->left->data : 0,
                                 root->right ? root->right->data : 0);
 
@@ -228,7 +224,7 @@ node *deleteNode(node *root, uint64_t data)
 int main()
 {
 
-    node *root = NULL;
+    node *root = nullptr;
     // remplir l'arbre
     // faire des tests
     return 0;
