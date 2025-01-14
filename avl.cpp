@@ -53,7 +53,6 @@ int bf(node *n)
 
 node *rrrotation(node *n)
 { // Rotation RR
-    node *p;
     node *tp;
     tp = n->left;
 
@@ -209,7 +208,7 @@ node *deleteNode(node *root, uint64_t data)
     // gauche droite
     if (balance > 1 && 
         bf(root->left) < 0) {
-        return lrrotation(root);
+        return rlrotation(root);
     }
 
     // droite droite
@@ -220,7 +219,7 @@ node *deleteNode(node *root, uint64_t data)
     // droite gauche
     if (balance < -1 && 
         bf(root->right) > 0) {
-        return rlrotation(root);
+        return lrrotation(root);
     }
     
     return root;
