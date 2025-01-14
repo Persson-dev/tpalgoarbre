@@ -230,11 +230,22 @@ node* search(node* root, std::uint64_t data) {
     return search(root->right, data);
 }
 
+std::string printAVL (node* n){
+    std::string str = "";
+    if (n == nullptr) {
+        str = "()";
+        return str;
+    } else {
+        str += "(" + std::to_string(n->data) + ", " + printAVL(n->left) + ", " + printAVL(n->right) + ")";
+        return str;
+    }
+}
+
 int main()
 {
+    node * root = new node(5);
+    std::cout << printAVL(root);
 
-    node *root = nullptr;
-    // remplir l'arbre
-    // faire des tests
+    delete root;
     return 0;
 }
