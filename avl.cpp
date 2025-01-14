@@ -38,13 +38,11 @@ int bf(node *n){ // Balance Factor BF
 }
 
 node* llrotation(node *n){ // Rotation LL
-    node *p;
     node *tp;
-    p = n;
-    tp = p->left;
+    tp = n->left;
 
-    p->left = nullptr;
-    tp->right = p;
+    n->left = nullptr;
+    tp->right = n;
 
     return tp;
 }
