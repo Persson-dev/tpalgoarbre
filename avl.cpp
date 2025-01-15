@@ -95,12 +95,13 @@ node *lrrotation(node *n) { // Rotation LR
 
 // insère la valeur data au bon endroit dans l'arbre enraciné en root ...
 node *insert(node *root, uint64_t data) {
-    if (!root)
+    if (!root) {
         return new node{data};
+    }
 
-    if (data < root->data)
+    if (data < root->data) {
         root->left = insert(root->left, data);
-    else if (data > root->data) {
+    } else if (data > root->data) {
         root->right = insert(root->right, data);
     } else {
         return root;
@@ -224,8 +225,8 @@ std::string printAVL(node *n) {
 }
 
 int main() {
-    int t_start, t_end, t_exec;
-    node *root;
+    int t_start, t_end, t_v_exec, t_s_exec, t_d_exec;
+    node *root = nullptr;
 
     std::string power;
     std::string valuename;
@@ -234,6 +235,8 @@ int main() {
 
     std::string line;
 
+    std::ofstream resfile("times.csv");
+    resfile << "Values, Search, Delete" << std::endl;
     for (int i = 1; i < 6; i++) {
         power = std::to_string(5 * i);
         valuename = "Values_" + power + ".txt";
@@ -251,8 +254,8 @@ int main() {
             insert(root, std::stoull(line));
         }
         t_end = clock();
-        t_exec = (t_end - t_start) * 1000 / CLOCKS_PER_SEC;
-        std::cout << power << " | Temps d'inser : " << t_exec << " ms" << std::endl;
+        t_v_exec = (t_end - t_start) * 1000 / CLOCKS_PER_SEC;
+        std::cout << power << " | Temps d'inser : " << t_v_exec << " ms" << std::endl;
 
         vfile.close();
 
@@ -268,8 +271,8 @@ int main() {
             search(root, std::stoull(line));
         }
         t_end = clock();
-        t_exec = (t_end - t_start) * 1000 / CLOCKS_PER_SEC;
-        std::cout << power << " |  Temps de recherche : " << t_exec << " ms" << std::endl;
+        t_s_exec = (t_end - t_start) * 1000 / CLOCKS_PER_SEC;
+        std::cout << power << " |  Temps de recherche : " << t_s_exec << " ms" << std::endl;
 
         sfile.close();
 
@@ -285,11 +288,14 @@ int main() {
             deleteNode(root, std::stoull(line));
         }
         t_end = clock();
-        t_exec = (t_end - t_start) * 1000 / CLOCKS_PER_SEC;
-        std::cout << power << " | Temps de suppression : " << t_exec << " ms" << std::endl;
+        t_d_exec = (t_end - t_start) * 1000 / CLOCKS_PER_SEC;
+        std::cout << power << " | Temps de suppression : " << t_d_exec << " ms" << std::endl;
 
         dfile.close();
+
+        resfile << std::to_string(t_v_exec) << ", " << std::to_string(t_s_exec) << ", " << std::to_string(t_d_exec) << std::endl;
     }
+    resfile.close();
 
     delete root;
     return 0;
